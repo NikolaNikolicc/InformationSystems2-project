@@ -12,7 +12,8 @@ DROP TABLE IF EXISTS `operativna-struktura`.`MESTO`;
 
 CREATE TABLE `operativna-struktura`.`MESTO` (
     `IdMes` INT AUTO_INCREMENT PRIMARY KEY,
-    `Mesto` VARCHAR(20) NOT NULL
+    `Mesto` VARCHAR(20) NOT NULL,
+    `DatumUnosa` TIMESTAMP NOT NULL
 );
 
 CREATE TABLE `operativna-struktura`.`KORISNIK` (
@@ -22,6 +23,7 @@ CREATE TABLE `operativna-struktura`.`KORISNIK` (
     `Godiste` INT NOT NULL,
     `Pol` VARCHAR(1) NOT NULL CHECK (Pol IN ('M', 'Z')),
     `IdMes` INT NOT NULL,
+    `DatumUnosa` TIMESTAMP NOT NULL,
     FOREIGN KEY (`IdMes`) REFERENCES `operativna-struktura`.`MESTO`(`IdMes`) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
@@ -37,6 +39,7 @@ CREATE TABLE `operativna-struktura`.`VIDEO` (
     `Datum` DATE NOT NULL,
     `Vreme` TIME NOT NULL,
     `IdKor` INT NOT NULL,
+    `DatumUnosa` TIMESTAMP NOT NULL,
     FOREIGN KEY (`IdKor`) REFERENCES `operativna-struktura`.`KORISNIK`(`IdKor`) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 

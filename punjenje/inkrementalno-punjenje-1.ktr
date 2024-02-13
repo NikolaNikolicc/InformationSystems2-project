@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>punjenje-1</name>
+    <name>inkrementalno-punjenje-1</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -427,9 +427,9 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2024/02/13 02:19:00.545</created_date>
+    <created_date>2024/02/13 14:38:57.872</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2024/02/13 02:19:00.545</modified_date>
+    <modified_date>2024/02/13 14:38:57.872</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
@@ -563,13 +563,13 @@
   </connection>
   <order>
     <hop>
-      <from>mesto ob</from>
-      <to>mesto sp</to>
+      <from>mesto inc ob</from>
+      <to>mesto inc sp</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>pol ob</from>
-      <to>pol sp</to>
+      <from>pol inc ob</from>
+      <to>pol inc sp</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
@@ -589,7 +589,7 @@
     </hop>
   </order>
   <step>
-    <name>mesto ob</name>
+    <name>mesto inc ob</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -600,7 +600,9 @@
       <schema_name/>
     </partitioning>
     <connection>operativna-struktura</connection>
-    <sql>SELECT * FROM MESTO</sql>
+    <sql>SELECT * FROM MESTO m,
+(select datum from `skladiste-struktura`.poslednja_izmena where id = 1) as poslednja_izmena
+where m.datumunosa > poslednja_izmena.datum</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -614,7 +616,7 @@
         <name>IdMes</name>
         <length>9</length>
         <precision>0</precision>
-        <origin>Table input</origin>
+        <origin>mesto inc ob</origin>
         <comments>IdMes</comments>
         <conversion_Mask>####0;-####0</conversion_Mask>
         <decimal_symbol>.</decimal_symbol>
@@ -637,8 +639,54 @@
         <name>Mesto</name>
         <length>20</length>
         <precision>-1</precision>
-        <origin>Table input</origin>
+        <origin>mesto inc ob</origin>
         <comments>Mesto</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Timestamp</type>
+        <storagetype>normal</storagetype>
+        <name>DatumUnosa</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>mesto inc ob</origin>
+        <comments>DatumUnosa</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Timestamp</type>
+        <storagetype>normal</storagetype>
+        <name>datum</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>mesto inc ob</origin>
+        <comments>datum</comments>
         <conversion_Mask/>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -664,13 +712,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>144</yloc>
+      <xloc>336</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>mesto sp</name>
+    <name>mesto inc sp</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -716,13 +764,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>272</yloc>
+      <xloc>336</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>pol ob</name>
+    <name>pol inc ob</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -733,7 +781,9 @@
       <schema_name/>
     </partitioning>
     <connection>operativna-struktura</connection>
-    <sql>SELECT DISTINCT(Pol) FROM Korisnik</sql>
+    <sql>SELECT * FROM KORISNIK k,
+(select datum from `skladiste-struktura`.poslednja_izmena where id = 1) as poslednja_izmena
+where k.datumunosa > poslednja_izmena.datum and k.pol not in (select naziv from `skladiste-struktura`.pol)</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -742,13 +792,174 @@
     <cached_row_meta_active>N</cached_row_meta_active>
     <row-meta>
       <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>IdKor</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>pol inc ob</origin>
+        <comments>IdKor</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>Ime</name>
+        <length>20</length>
+        <precision>-1</precision>
+        <origin>pol inc ob</origin>
+        <comments>Ime</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>Email</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>pol inc ob</origin>
+        <comments>Email</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>Godiste</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>pol inc ob</origin>
+        <comments>Godiste</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
         <type>String</type>
         <storagetype>normal</storagetype>
         <name>Pol</name>
         <length>1</length>
         <precision>-1</precision>
-        <origin>Pol ob</origin>
+        <origin>pol inc ob</origin>
         <comments>Pol</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Integer</type>
+        <storagetype>normal</storagetype>
+        <name>IdMes</name>
+        <length>9</length>
+        <precision>0</precision>
+        <origin>pol inc ob</origin>
+        <comments>IdMes</comments>
+        <conversion_Mask>####0;-####0</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Timestamp</type>
+        <storagetype>normal</storagetype>
+        <name>DatumUnosa</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>pol inc ob</origin>
+        <comments>DatumUnosa</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>Timestamp</type>
+        <storagetype>normal</storagetype>
+        <name>datum</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>pol inc ob</origin>
+        <comments>datum</comments>
         <conversion_Mask/>
         <decimal_symbol>.</decimal_symbol>
         <grouping_symbol>,</grouping_symbol>
@@ -774,13 +985,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>144</yloc>
+      <xloc>512</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>pol sp</name>
+    <name>pol inc sp</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -822,8 +1033,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>272</yloc>
+      <xloc>512</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -839,7 +1050,9 @@
       <schema_name/>
     </partitioning>
     <connection>operativna-struktura</connection>
-    <sql>select distinct(2024 - godiste) as Uzrast from korisnik</sql>
+    <sql>select distinct(2024 - godiste) as Uzrast from korisnik k,
+(select datum from `skladiste-struktura`.poslednja_izmena where id = 1) as poslednja_izmena
+where k.datumunosa > poslednja_izmena.datum</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -880,8 +1093,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
-      <yloc>144</yloc>
+      <xloc>656</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -903,7 +1116,7 @@
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
+    <specify_fields>Y</specify_fields>
     <partitioning_enabled>N</partitioning_enabled>
     <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
@@ -914,6 +1127,14 @@
     <return_keys>N</return_keys>
     <return_field/>
     <fields>
+      <field>
+        <column_name>IdUzr</column_name>
+        <stream_name>IdUzr</stream_name>
+      </field>
+      <field>
+        <column_name>Uzrast</column_name>
+        <stream_name>Uzrast</stream_name>
+      </field>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -924,8 +1145,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
-      <yloc>272</yloc>
+      <xloc>656</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -942,7 +1163,9 @@
     </partitioning>
     <connection>operativna-struktura</connection>
     <sql>select v.idvid as IdVid, v.naziv as NazivVideo, k.idkat as IdKat
-from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k on (vk.idkat = k.idkat)
+from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k on (vk.idkat = k.idkat),
+(select datum from `skladiste-struktura`.poslednja_izmena where id = 1) as poslednja_izmena
+where v.datumunosa > poslednja_izmena.datum
 </sql>
     <limit>0</limit>
     <lookup/>
@@ -1030,8 +1253,8 @@ from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k 
       </output>
     </remotesteps>
     <GUI>
-      <xloc>656</xloc>
-      <yloc>144</yloc>
+      <xloc>800</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1053,7 +1276,7 @@ from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k 
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
-    <specify_fields>N</specify_fields>
+    <specify_fields>Y</specify_fields>
     <partitioning_enabled>N</partitioning_enabled>
     <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
@@ -1064,6 +1287,18 @@ from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k 
     <return_keys>N</return_keys>
     <return_field/>
     <fields>
+      <field>
+        <column_name>IdVid</column_name>
+        <stream_name>IdVid</stream_name>
+      </field>
+      <field>
+        <column_name>NazivVideo</column_name>
+        <stream_name>NazivVideo</stream_name>
+      </field>
+      <field>
+        <column_name>IdKat</column_name>
+        <stream_name>IdKat</stream_name>
+      </field>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -1074,8 +1309,8 @@ from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k 
       </output>
     </remotesteps>
     <GUI>
-      <xloc>656</xloc>
-      <yloc>272</yloc>
+      <xloc>800</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1091,14 +1326,23 @@ from video v join video_kategorija vk on (v.idvid = vk.idvid) join kategorija k 
       <schema_name/>
     </partitioning>
     <connection>operativna-struktura</connection>
-    <sql>SELECT DISTINCT Vreme
+    <sql>SELECT DISTINCT Datum, Vreme
 FROM (
-    SELECT Vreme FROM GLEDANJE
+    SELECT Datum, NULL AS Vreme FROM GLEDANJE
     UNION
-    SELECT Vreme FROM OCENA
+    SELECT Datum, NULL AS Vreme FROM OCENA
     UNION
-    SELECT Vreme FROM PRETPLATA
-) AS Vreme;
+    SELECT Datum, NULL AS Vreme FROM PRETPLATA
+    UNION
+    SELECT NULL AS Datum, Vreme FROM GLEDANJE
+    UNION
+    SELECT NULL AS Datum, Vreme FROM OCENA
+    UNION
+    SELECT NULL AS Datum, Vreme FROM PRETPLATA
+) AS CombinedData
+WHERE
+    (Datum IS NOT NULL OR Vreme IS NOT NULL)  -- Exclude rows where both Datum and Vreme are NULL
+    AND TIMESTAMP(Datum, Vreme) &gt; (SELECT datum FROM `skladiste-struktura`.poslednja_izmena WHERE id = 1);
 </sql>
     <limit>0</limit>
     <lookup/>
@@ -1107,6 +1351,29 @@ FROM (
     <lazy_conversion_active>N</lazy_conversion_active>
     <cached_row_meta_active>N</cached_row_meta_active>
     <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>Datum</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>vreme ob</origin>
+        <comments>Datum</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Europe/Prague</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
       <value-meta>
         <type>Date</type>
         <storagetype>normal</storagetype>
@@ -1140,8 +1407,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>144</yloc>
+      <xloc>928</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1188,48 +1455,8 @@ FROM (
       </output>
     </remotesteps>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>272</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>poslednja izmena</name>
-    <type>ExecSQL</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>skladiste-struktura</connection>
-    <execute_each_row>N</execute_each_row>
-    <single_statement>N</single_statement>
-    <replace_variables>N</replace_variables>
-    <quoteString>N</quoteString>
-    <sql>INSERT INTO poslednja_izmena(
-	id, datum)
-	VALUES (1, now());</sql>
-    <set_params>N</set_params>
-    <insert_field/>
-    <update_field/>
-    <delete_field/>
-    <read_field/>
-    <arguments>
-    </arguments>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>944</xloc>
-      <yloc>208</yloc>
+      <xloc>928</xloc>
+      <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

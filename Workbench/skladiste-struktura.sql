@@ -11,8 +11,8 @@ DROP TABLE IF EXISTS `skladiste-struktura`.`MESTO`;
 DROP TABLE IF EXISTS `skladiste-struktura`.`poslednja_izmena`;
 
 CREATE TABLE `skladiste-struktura`.`poslednja_izmena` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `datum` DATE NOT NULL
+    `id` INT PRIMARY KEY,
+    `datum` TIMESTAMP NOT NULL
 );
 
 CREATE TABLE `skladiste-struktura`.`MESTO` (
