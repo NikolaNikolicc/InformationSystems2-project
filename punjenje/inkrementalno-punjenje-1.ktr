@@ -747,10 +747,6 @@ where m.datumunosa > poslednja_izmena.datum</sql>
     <return_field/>
     <fields>
       <field>
-        <column_name>IdMes</column_name>
-        <stream_name>IdMes</stream_name>
-      </field>
-      <field>
         <column_name>Naziv</column_name>
         <stream_name>Mesto</stream_name>
       </field>
@@ -1128,10 +1124,6 @@ where k.datumunosa > poslednja_izmena.datum</sql>
     <return_field/>
     <fields>
       <field>
-        <column_name>IdUzr</column_name>
-        <stream_name>IdUzr</stream_name>
-      </field>
-      <field>
         <column_name>Uzrast</column_name>
         <stream_name>Uzrast</stream_name>
       </field>
@@ -1326,24 +1318,15 @@ where v.datumunosa > poslednja_izmena.datum
       <schema_name/>
     </partitioning>
     <connection>operativna-struktura</connection>
-    <sql>SELECT DISTINCT Datum, Vreme
+    <sql>SELECT DISTINCT Vreme
 FROM (
-    SELECT Datum, NULL AS Vreme FROM GLEDANJE
+    SELECT Vreme FROM GLEDANJE
     UNION
-    SELECT Datum, NULL AS Vreme FROM OCENA
+    SELECT Vreme FROM OCENA
     UNION
-    SELECT Datum, NULL AS Vreme FROM PRETPLATA
-    UNION
-    SELECT NULL AS Datum, Vreme FROM GLEDANJE
-    UNION
-    SELECT NULL AS Datum, Vreme FROM OCENA
-    UNION
-    SELECT NULL AS Datum, Vreme FROM PRETPLATA
-) AS CombinedData
-WHERE
-    (Datum IS NOT NULL OR Vreme IS NOT NULL)  -- Exclude rows where both Datum and Vreme are NULL
-    AND TIMESTAMP(Datum, Vreme) &gt; (SELECT datum FROM `skladiste-struktura`.poslednja_izmena WHERE id = 1);
-</sql>
+    SELECT Vreme FROM PRETPLATA
+) AS CombinedVreme
+WHERE Vreme NOT IN (SELECT Vreme FROM `skladiste-struktura`.vreme);</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -1351,29 +1334,6 @@ WHERE
     <lazy_conversion_active>N</lazy_conversion_active>
     <cached_row_meta_active>N</cached_row_meta_active>
     <row-meta>
-      <value-meta>
-        <type>Date</type>
-        <storagetype>normal</storagetype>
-        <name>Datum</name>
-        <length>-1</length>
-        <precision>-1</precision>
-        <origin>vreme ob</origin>
-        <comments>Datum</comments>
-        <conversion_Mask/>
-        <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol>,</grouping_symbol>
-        <currency_symbol/>
-        <trim_type>none</trim_type>
-        <case_insensitive>N</case_insensitive>
-        <collator_disabled>Y</collator_disabled>
-        <collator_strength>0</collator_strength>
-        <sort_descending>N</sort_descending>
-        <output_padding>N</output_padding>
-        <date_format_lenient>N</date_format_lenient>
-        <date_format_locale>en_US</date_format_locale>
-        <date_format_timezone>Europe/Prague</date_format_timezone>
-        <lenient_string_to_number>N</lenient_string_to_number>
-      </value-meta>
       <value-meta>
         <type>Date</type>
         <storagetype>normal</storagetype>
