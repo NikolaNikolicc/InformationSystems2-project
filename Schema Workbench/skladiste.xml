@@ -1,0 +1,96 @@
+<Schema name="New Schema1">
+  <Dimension type="StandardDimension" visible="true" name="Mesto">
+    <Hierarchy name="New Hierarchy 0" visible="true" hasAll="true">
+      <Table name="mesto" alias="">
+      </Table>
+      <Level name="Naziv" visible="true" table="mesto" column="Naziv" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Pol">
+    <Hierarchy name="New Hierarchy 0" visible="true" hasAll="true">
+      <Table name="pol" alias="">
+      </Table>
+      <Level name="Naziv" visible="true" table="pol" column="Naziv" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Uzrast">
+    <Hierarchy name="New Hierarchy 0" visible="true" hasAll="true">
+      <Table name="uzrast" alias="">
+      </Table>
+      <Level name="Uzrast" visible="true" table="uzrast" column="Uzrast" type="Integer" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Video">
+    <Hierarchy name="New Hierarchy 0" visible="true" hasAll="true">
+      <Table name="video" alias="">
+      </Table>
+      <Level name="NazivVideo" visible="true" table="video" column="NazivVideo" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="IdKat" visible="true" table="video" column="IdKat" type="Integer" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Vreme">
+    <Hierarchy name="New Hierarchy 0" visible="true" hasAll="true">
+      <Table name="vreme" alias="">
+      </Table>
+      <Level name="Vreme" visible="true" table="vreme" column="Vreme" type="Time" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Gledanja" visible="true" cache="true" enabled="true">
+    <Table name="gledanja" alias="">
+    </Table>
+    <DimensionUsage source="Vreme" name="Vreme" visible="true" foreignKey="IdVre">
+    </DimensionUsage>
+    <DimensionUsage source="Video" name="Video" visible="true" foreignKey="IdVid">
+    </DimensionUsage>
+    <DimensionUsage source="Pol" name="Pol" visible="true" foreignKey="IdPol">
+    </DimensionUsage>
+    <DimensionUsage source="Uzrast" name="Uzrast" visible="true" foreignKey="IdUzr">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoGledaoca" visible="true" foreignKey="IdMesGle">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoVlasnika" visible="true" foreignKey="IdMesVla">
+    </DimensionUsage>
+    <Measure name="BrMinuta" column="BrMinuta" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Ocene" visible="true" cache="true" enabled="true">
+    <Table name="ocene" alias="">
+    </Table>
+    <DimensionUsage source="Vreme" name="Vreme" visible="true" foreignKey="IdVre">
+    </DimensionUsage>
+    <DimensionUsage source="Video" name="Video" visible="true" foreignKey="IdVid">
+    </DimensionUsage>
+    <DimensionUsage source="Pol" name="Pol" visible="true" foreignKey="IdPol">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoGledaoca" visible="true" foreignKey="IdMesGle">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoVlasnika" visible="true" foreignKey="IdMesVla">
+    </DimensionUsage>
+    <DimensionUsage source="Uzrast" name="Uzrast" visible="true" foreignKey="IdUzr">
+    </DimensionUsage>
+    <Measure name="OcenaUkupno" column="Ocena" aggregator="distinct-count" visible="true">
+    </Measure>
+    <Measure name="OcenaProsek" column="Ocena" aggregator="avg" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Pretplate" visible="true" cache="true" enabled="true">
+    <Table name="pretplate" alias="">
+    </Table>
+    <DimensionUsage source="Vreme" name="Vreme" visible="true" foreignKey="IdVre">
+    </DimensionUsage>
+    <DimensionUsage source="Pol" name="Pol" visible="true" foreignKey="IdPol">
+    </DimensionUsage>
+    <DimensionUsage source="Uzrast" name="Uzrast" visible="true" foreignKey="IdUzr">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="Mesto" visible="true" foreignKey="IdMes">
+    </DimensionUsage>
+    <Measure name="Cena" column="Cena" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
