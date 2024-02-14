@@ -1,0 +1,17 @@
+#################################################
+
+select {[Measures].BrMinuta} on axis(0),
+crossjoin(crossjoin({Uzrast.Members},{Pol.Members}), {MestoGledaoca.Members}) on axis(1)
+from [Gledanja]
+
+#################################################
+
+select {Measures.OcenaProsek} on axis(0),
+crossjoin({Video.Members},{MestoVlasnika.Members}) on axis(1)
+from [Ocene]
+
+#################################################
+
+select {Measures.Cena} on axis(0),
+crossjoin(crossjoin({Pol.Members},{Uzrast.Members}),{Mesto.Members}) on axis(1)
+from [Pretplate]
